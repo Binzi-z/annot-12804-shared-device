@@ -1,0 +1,50 @@
+{
+  "version": "1.0.0",
+  "created_at": "2026-11-17T00:00:00",
+  "description": "风控规则集：同设备多账号盗用识别 + 两类既有欺诈规则。改参数只需发新规则文件，无需改代码发版。",
+  "rules": [
+    {
+      "rule": "burst_small_pay",
+      "enabled": true,
+      "params": {
+        "action": "pay",
+        "min_count": 12,
+        "window_seconds": 60,
+        "unseen_region_only": true,
+        "history_event_min": 20
+      }
+    },
+    {
+      "rule": "new_device_big_withdraw",
+      "enabled": true,
+      "params": {
+        "login_action": "login",
+        "risk_action": "withdraw",
+        "min_amount": 10000,
+        "window_seconds": 3600
+      }
+    },
+    {
+      "rule": "shared_device_takeover",
+      "enabled": true,
+      "params": {
+        "window_seconds": 1800,
+        "min_accounts": 2,
+        "tight_switch_seconds": 300,
+        "night_hours": [0, 5],
+        "unseen_region_share": 0.8,
+        "unseen_region_history_min": 10,
+        "action_similarity_threshold": 0.5,
+        "risk_actions": ["withdraw", "pay"],
+        "weights": {
+          "tight_switch": 2,
+          "unseen_region": 2,
+          "night_window": 1,
+          "action_dissimilar": 2,
+          "risk_action_after_login": 2
+        },
+        "alert_threshold": 6
+      }
+    }
+  ]
+}
